@@ -1,6 +1,11 @@
 #!groovy
 
 pipeline {
+
+    agent {
+        label 'master'
+    }
+
     environment {
         VERSION = "1.${BUILD_NUMBER}-${env.BRANCH_NAME}".replace('/', '-')
 
