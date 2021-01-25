@@ -18,7 +18,9 @@
   <properties>
     <java.version>1.8</java.version>
 
+    <version.jacoco>0.7.9</version.jacoco>
     <version.io.springfox>2.9.2</version.io.springfox>
+    <version.sonar.plugin>3.6.0.1398</version.sonar.plugin>
   </properties>
 
   <dependencies>
@@ -76,6 +78,46 @@
         <configuration>
           <finalName>${project.name}</finalName>
         </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${version.jacoco}</version>
+        <executions>
+          <execution>
+            <id>default-instrument</id>
+            <goals>
+              <goal>instrument</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>default-restore-instrumented-classes</id>
+            <goals>
+              <goal>restore-instrumented-classes</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <excludes>
+          </excludes>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <systemPropertyVariables>
+            <jacoco-agent.destfile>${project.build.directory}/jacoco.exec</jacoco-agent.destfile>
+          </systemPropertyVariables>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.sonarsource.scanner.maven</groupId>
+        <artifactId>sonar-maven-plugin</artifactId>
+        <version>${version.sonar.plugin}</version>
       </plugin>
     </plugins>
   </build>
