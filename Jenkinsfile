@@ -14,6 +14,9 @@ pipeline {
         SONAR_URL = "${env.SONAR_URL}"
         SONAR_LOGIN = "${env.SONAR_LOGIN}"
         SONAR_KEY = "${env.SONAR_KEY}"
+
+        GCR_URL = "${env.GCR_URL}"
+        DOCKER_IMAGE_NAME = "${GCR_URL}/${ARTIFACT_NAME}:${VERSION}"
     }
 
     options {
@@ -68,6 +71,21 @@ pipeline {
 
                     steps {
                         sh 'mvn -f pom.xml package -Dmaven.test.skip=true'
+                    }
+                }
+
+                stage('Build image') {
+                    steps {
+                        unstash 'artifact'
+                        unstash 'dockerfile'
+
+                        sh """docker build -t ${DOCKER_IMAGE_NAME} ."""
+                    }
+                }
+
+                stage('Push image') {
+                    steps {
+                        sh """docker push ${DOCKER_IMAGE_NAME}"""
                     }
                 }
             }
