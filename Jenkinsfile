@@ -65,10 +65,6 @@ pipeline {
                 }
 
                 stage('Build artifact') {
-                    when {
-                        anyOf { branch 'release/*'; branch 'master' }
-                    }
-
                     steps {
                         sh 'mvn -f pom.xml package -Dmaven.test.skip=true'
                     }
@@ -76,9 +72,6 @@ pipeline {
 
                 stage('Build image') {
                     steps {
-                        unstash 'artifact'
-                        unstash 'dockerfile'
-
                         sh """docker build -t ${DOCKER_IMAGE_NAME} ."""
                     }
                 }
