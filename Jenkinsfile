@@ -70,6 +70,12 @@ pipeline {
                     }
                 }
 
+                stage('Build artifact') {
+                    steps {
+                        echo "Deploying to Nexus"
+                    }
+                }
+
                 stage('Build image') {
                     steps {
                         sh """docker build -t ${DOCKER_IMAGE_NAME} ."""
