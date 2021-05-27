@@ -10,6 +10,9 @@ pipeline {
         VERSION = "1.${BUILD_NUMBER}-${env.BRANCH_NAME}".replace('/', '-')
 
         ARTIFACT_NAME = "greeting-api"
+        
+        SONAR_URL = "${env.SONAR_URL}"
+        SONAR_LOGIN = "${env.SONAR_LOGIN}"
 
         DOCKER_IMAGE_NAME = "oleghudyma/${ARTIFACT_NAME}:${VERSION}"
     }
@@ -51,9 +54,7 @@ pipeline {
 
         stage('Quality gates') {
             steps {
-                sh """mvn sonar:sonar -Dsonar.projectKey=${SONAR_KEY} -Dsonar.host.url=${
-                    SONAR_URL
-                } -Dsonar.login=${SONAR_LOGIN}"""
+                sh """mvn sonar:sonar -Dsonar.host.url=${SONAR_URL} -Dsonar.login=${SONAR_LOGIN}"""
             }
         }
 
